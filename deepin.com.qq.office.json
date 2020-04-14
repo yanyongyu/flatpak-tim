@@ -1,0 +1,41 @@
+{
+  "id": "deepin.com.qq.office",
+  "branch": "2.0.0",
+  "runtime": "com.deepin.wine.Platform/i386/",
+  "runtime-version": "2.18.1",
+  "sdk": "com.deepin.wine.Sdk/i386/2.18.1",
+  "command": "run.sh",
+  "finish-args": [
+    "--share=network",
+    "--share=ipc",
+    "--socket=x11",
+    "--socket=wayland",
+    "--socket=pulseaudio",
+    "--socket=session-bus",
+    "--device=dri",
+    "--filesystem=home",
+    "--allow=devel"
+  ],
+
+  "add-extensions": {
+    "deepin.com.qq.office.ext": {
+      "directory": "ext",
+      "subdirectories": true,
+      "version": "2.0.0"
+    }
+  },
+
+  "modules": [
+    {
+      "name": "tim",
+      "buildsystem": "simple",
+      "build-commands": ["bash ./install.sh"],
+      "sources": [
+        {
+          "type": "dir",
+          "path": "./deepin.com.qq.office"
+        }
+      ]
+    }
+  ]
+}
