@@ -3,17 +3,9 @@
 # @Author         : yanyongyu
 # @Date           : 2020-04-13 15:37:46
 # @LastEditors    : yanyongyu
-# @LastEditTime   : 2020-04-14 13:45:56
+# @LastEditTime   : 2020-04-14 18:07:16
 # @Description    : None
 # @GitHub         : https://github.com/yanyongyu
-###
-
-#!/bin/bash
-
-#   Copyright (C) 2016 Deepin, Inc.
-#
-#   Author:     Li LongYu <lilongyu@linuxdeepin.com>
-#               Peng Hao <penghao@linuxdeepin.com>
 
 BOTTLENAME="Deepin-TIM"
 WINEPREFIX="$HOME/.deepinwine/$BOTTLENAME"
@@ -22,6 +14,10 @@ APPTAR="files.7z"
 APPVER="2.0.0"
 EXTDIR="/app/ext"
 WINE_CMD="deepin-wine"
+
+_SetRegistryValue() {
+    env WINEPREFIX="$WINEPREFIX" $WINE_CMD reg ADD "$1" /v "$2" /t $3 /d "$4" /f
+}
 
 _DeleteRegistry() {
     env WINEPREFIX="$WINEPREFIX" $WINE_CMD reg DELETE "$1" /f &>/dev/null
@@ -94,11 +90,12 @@ ExtractApp() {
 }
 DeployApp() {
     ExtractApp "$WINEPREFIX"
+    _SetRegistryValue "HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\FontLink\\SystemLink" "Arial" "REG_SZ" "simsun.ttc"
     echo "$APPVER" >"$WINEPREFIX/PACKAGE_VERSION"
 }
 RemoveApp() {
-    rm -rf "$WINEPREFIX"
     rm -f "$WINEPREFIX/../.QQ_run"
+    rm -rf "$WINEPREFIX"
 }
 ResetApp() {
     echo "Reset $PACKAGENAME....."
